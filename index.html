@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Soal Cerita - Kelas 3</title>
+<style>
+  :root{
+    --hijau:#43a047; --hijau-l:#81c784; --merah:#e53935; --kuning:#fdd835;
+    --biru:#1e88e5; --orange:#fb8c00; --ungu:#8e24aa; --pink:#ec407a;
+    --bg1:#ffe0f0; --bg2:#e0f7fa; --tinta:#37474f; --abu:#eceff1;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Segoe UI',Tahoma,system-ui,-apple-system,sans-serif;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    background-attachment:fixed;color:var(--tinta);min-height:100vh;padding:14px;
+    font-size:18px;line-height:1.55;
+  }
+  .wrap{max-width:780px;margin:0 auto}
+  .kartu{
+    background:#fff;border-radius:22px;padding:24px;
+    box-shadow:0 10px 28px rgba(0,0,0,.10);margin-bottom:16px;border:3px solid #fff;
+  }
+  .kartu.benar{border-color:var(--hijau-l);animation:pop .5s}
+  .kartu.salah{border-color:var(--merah);animation:goyang .5s}
+  @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+  @keyframes goyang{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+  @keyframes melayang{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+  .sapa{text-align:center}
+  .maskot{font-size:74px;display:inline-block;animation:melayang 2.4s ease-in-out infinite}
+  h1{font-size:30px;color:var(--pink);margin:6px 0 2px;text-shadow:0 2px 0 #fff}
+  .sub{color:var(--biru);font-weight:700;margin-bottom:10px}
+  .petunjuk{background:#fffde7;border:2px dashed var(--kuning);border-radius:14px;padding:14px 18px;text-align:left;margin:14px 0;font-size:16px}
+  .petunjuk b{color:var(--orange)}
+  .petunjuk li{margin:4px 0 4px 20px}
+
+  .form-baris{margin:10px 0}
+  label{display:block;font-weight:700;margin-bottom:4px;color:var(--ungu)}
+  input[type=text]{
+    width:100%;padding:14px 16px;font-size:20px;border:3px solid var(--abu);
+    border-radius:14px;outline:none;transition:.2s;
+  }
+  input[type=text]:focus{border-color:var(--biru);background:#f0f7ff}
+
+  .btn{
+    border:none;border-radius:16px;padding:14px 26px;font-size:19px;font-weight:800;
+    cursor:pointer;transition:.15s;font-family:inherit;color:#fff;
+    box-shadow:0 5px 0 rgba(0,0,0,.15);
+  }
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+  .btn-hijau{background:var(--hijau)} .btn-biru{background:var(--biru)}
+  .btn-orange{background:var(--orange)} .btn-ungu{background:var(--ungu)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+  .tengah{text-align:center}
+
+  .qhead{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  .qno{background:var(--pink);color:#fff;font-weight:800;border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:20px;flex:none}
+  .qjudul{font-size:21px;font-weight:800;color:var(--ungu);flex:1}
+  .skor-pill{background:#fff59d;color:#5d4037;font-weight:800;padding:6px 14px;border-radius:30px;font-size:16px;flex:none}
+
+  .progress{height:16px;background:var(--abu);border-radius:10px;overflow:hidden;margin:10px 0 14px}
+  .progress .bar{height:100%;width:0;background:linear-gradient(90deg,var(--hijau-l),var(--hijau));transition:width .4s}
+  .progres-txt{font-size:14px;font-weight:700;color:#607d8b;margin-bottom:6px}
+
+  .cerita{background:#fce4ec;border-left:8px solid var(--pink);border-radius:12px;padding:14px 16px;margin:10px 0;font-size:18px}
+  .info{background:#fff3e0;border-radius:12px;padding:12px 16px;margin:10px 0;font-size:16px}
+  .info .bar{font-weight:800;color:var(--orange);display:block;margin-top:6px}
+  .info span:first-child{font-weight:800;color:var(--biru)}
+
+  #input-area{margin:14px 0}
+  .pertanyaan{font-size:19px;font-weight:800;color:var(--tinta);margin:8px 0 12px;background:#f3e5f5;padding:12px 16px;border-radius:12px}
+
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .opt{
+    background:#fff;border:3px solid var(--abu);border-radius:16px;padding:16px;
+    font-size:22px;font-weight:800;cursor:pointer;transition:.15s;text-align:center;
+    font-family:inherit;color:var(--tinta);
+  }
+  .opt:hover{border-color:var(--biru);background:#f0f7ff}
+  .opt.terpilih{border-color:var(--biru);background:#e3f2fd;transform:scale(1.02)}
+  .opt .ikon{font-size:30px;display:block;margin-bottom:4px}
+
+  .input-jawab{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .input-jawab input{flex:1;min-width:160px}
+  .satuan{font-weight:800;color:#607d8b}
+
+  /* susun angka (drag) */
+  .susun-area{text-align:center}
+  .slots{display:inline-flex;gap:8px;justify-content:center;margin:6px 0 14px}
+  .cell{display:inline-block;width:40px;height:54px;line-height:54px;text-align:center;font-size:28px;font-weight:800;background:#fff;border:3px dashed var(--biru);border-radius:10px;cursor:pointer;font-family:'Courier New',monospace}
+  .cell.isi{border-style:solid;border-color:var(--hijau);background:#e8f5e9}
+  .chip-area{margin-top:6px;background:#fffde7;border:2px dashed var(--kuning);border-radius:14px;padding:12px}
+  .chip-area .judul-chip{font-weight:800;color:var(--orange);margin-bottom:8px;font-size:15px}
+  .chip{display:inline-block;min-width:48px;padding:8px 6px;margin:4px;font-size:26px;font-weight:800;background:#fff;border:3px solid var(--biru);border-radius:12px;cursor:pointer;transition:.15s;font-family:'Courier New',monospace}
+  .chip:hover{background:#e3f2fd}
+  .chip.terpilih{background:var(--orange);color:#fff;border-color:var(--orange);transform:scale(1.08)}
+  .chip.pakai{opacity:.3;pointer-events:none}
+  .petunjuk-kecil{font-size:14px;color:#607d8b;margin-top:6px}
+
+  .bs-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .bs{padding:22px;border-radius:18px;font-size:24px;font-weight:800;cursor:pointer;border:4px solid var(--abu);font-family:inherit;transition:.15s}
+  .bs.b{background:#e8f5e9;color:var(--hijau)}
+  .bs.s{background:#ffebee;color:var(--merah)}
+  .bs:hover{transform:scale(1.02)}
+  .bs.terpilih{border-color:#37474f;transform:scale(1.03)}
+
+  .langkah{background:#f3e5f5;border-radius:14px;padding:14px 16px;margin:8px 0}
+  .langkah .tanya{font-weight:700;color:var(--ungu);margin-bottom:8px}
+
+  .jodo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+  .kat{min-height:140px;background:#e3f2fd;border:3px dashed var(--biru);border-radius:14px;padding:8px;text-align:center}
+  .kat .nama{font-weight:800;color:var(--biru);margin-bottom:8px;font-size:16px}
+  .kartu-j{background:#fff;border:2px solid var(--ungu);border-radius:10px;padding:8px;font-size:14px;margin:4px 0;cursor:pointer;transition:.15s}
+  .kartu-j:hover{background:#f3e5f5}
+  .kartu-j.terpilih{background:var(--ungu);color:#fff}
+  .kolam{background:#fffde7;border:2px dashed var(--kuning);border-radius:14px;padding:10px;min-height:60px}
+  .kolam .judul-k{font-weight:800;color:var(--orange);margin-bottom:6px;font-size:14px}
+
+  #feedback{min-height:24px;border-radius:14px;padding:12px 16px;margin:10px 0;font-weight:700;font-size:17px;transition:.2s}
+  #feedback.benar{background:#c8e6c9;color:#1b5e20;border:2px solid var(--hijau-l)}
+  #feedback.salah{background:#ffcdd2;color:#b71c1c;border:2px solid var(--merah)}
+  #feedback.info{background:#fff9c4;color:#5d4037;border:2px solid var(--kuning)}
+
+  .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+
+  #reveal{margin-top:12px}
+  .reveal-box{background:#e0f7fa;border-radius:14px;padding:14px 16px;border-left:8px solid var(--biru)}
+  .reveal-box .judul{font-weight:800;color:var(--biru);margin-bottom:8px}
+  .eq-card{display:inline-block;background:#fff;border:2px solid var(--abu);border-radius:10px;padding:8px 14px;margin:4px 6px 4px 0;text-align:center}
+  .eq{font-family:'Courier New',monospace;font-size:22px;font-weight:800;color:var(--tinta)}
+  .eq-note{font-size:13px;color:#607d8b;margin-top:2px}
+
+  .hasil{text-align:center}
+  .hasil .maskot{font-size:80px}
+  .skor-besar{font-size:46px;font-weight:800;color:var(--orange);margin:6px 0}
+  .skor-besar span{color:var(--hijau)}
+  .pesan{font-size:20px;font-weight:700;margin:8px 0 14px;color:var(--ungu)}
+  table.rekap{width:100%;border-collapse:collapse;margin:12px 0;font-size:15px}
+  table.rekap th,table.rekap td{border:1px solid #cfd8dc;padding:8px 6px;text-align:center}
+  table.rekap th{background:var(--biru);color:#fff}
+  table.rekap td.b{color:var(--hijau);font-weight:700}
+  table.rekap td.u{color:var(--orange);font-weight:700}
+  table.rekap td.s{color:var(--merah);font-weight:700}
+
+  .sembunyi{display:none!important}
+  @media(max-width:520px){
+    .opts,.bs-row,.jodo-grid{grid-template-columns:1fr}
+    body{font-size:17px}.qjudul{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- LAYAR SAMBUTAN -->
+  <div id="layar-sapa" class="kartu sapa">
+    <div class="maskot">🐰</div>
+    <h1>Petualangan Soal Cerita</h1>
+    <div class="sub">Bersama Lili si Kelinci — Kelas 3 SD 🌟</div>
+    <p>Yuk, kita berlatih <b>soal cerita matematika</b> dengan cara yang seru!</p>
+
+    <div class="petunjuk">
+      <b>📜 Petunjuk Bermain:</b>
+      <ul>
+        <li>Isi <b>nama</b> dan <b>kelas</b> kamu terlebih dahulu.</li>
+        <li>Bacalah cerita dengan teliti, lalu pikirkan sendiri cara menyelesaikannya. Jawab soal <b>berurutan dari nomor 1 sampai 10</b>. Kamu <b>tidak bisa loncat</b> ke soal berikutnya sebelum soal yang sedang dikerjakan selesai.</li>
+        <li>Ada banyak cara menjawab: pilihan ganda, isian, menyusun angka, benar-salah, menjodohkan, dan langkah per langkah.</li>
+        <li>Jika salah, kamu boleh <b>mengulang 1 kali</b>. Tiap soal nilainya <b>10</b> (total 100). Kalau benar pada saat mengulang, nilai berkurang <b>2</b>.</li>
+        <li>Jika masih salah setelah mengulang, Lili akan menunjukkan jawaban yang benar.</li>
+      </ul>
+    </div>
+
+    <div class="form-baris" style="text-align:left">
+      <label for="inNama">✏️ Nama Lengkap</label>
+      <input type="text" id="inNama" placeholder="Tulis namamu di sini..." autocomplete="off">
+    </div>
+    <div class="form-baris" style="text-align:left">
+      <label for="inKelas">🎒 Kelas</label>
+      <input type="text" id="inKelas" placeholder="Contoh: 3 A" autocomplete="off">
+    </div>
+    <div class="tengah" style="margin-top:14px">
+      <button class="btn btn-orange" id="btnMulai" onclick="mulai()">🚀 Mulai Petualangan!</button>
+    </div>
+  </div>
+
+  <!-- LAYAR KUIS -->
+  <div id="layar-kuis" class="sembunyi">
+    <div class="kartu">
+      <div class="progres-txt" id="progresTxt">Soal 1 dari 10</div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="qhead">
+        <div class="qno" id="qno">1</div>
+        <div class="qjudul" id="qjudul"></div>
+        <div class="skor-pill" id="skorPill">⭐ Skor: 0</div>
+      </div>
+
+      <div class="cerita" id="cerita"></div>
+      <div class="info" id="infoBox"></div>
+
+      <div id="input-area"></div>
+      <div id="feedback"></div>
+
+      <div class="controls">
+        <button class="btn btn-hijau" id="btnPeriksa" onclick="periksa()">✅ Periksa Jawaban</button>
+        <button class="btn btn-biru sembunyi" id="btnNext" onclick="lanjut()">Soal Berikutnya ➡️</button>
+      </div>
+
+      <div id="reveal"></div>
+    </div>
+  </div>
+
+  <!-- LAYAR HASIL -->
+  <div id="layar-hasil" class="kartu hasil sembunyi">
+    <div class="maskot">🎉</div>
+    <h1>Permainan Selesai!</h1>
+    <div id="hasilIdentitas" class="sub"></div>
+    <div class="skor-besar">Nilai: <span id="skorAkhir">0</span>/100</div>
+    <div class="pesan" id="pesanAkhir"></div>
+    <table class="rekap" id="rekap"></table>
+    <div class="controls">
+      <button class="btn btn-orange" onclick="ulangi()">🔁 Main Lagi</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ====================== DATA SOAL ====================== */
+const QUESTIONS = [
+  {
+    n:1, judul:"Toko Permen Sugar Joy 🍬", tipe:"pg_gambar",
+    cerita:"Toko Sugar Joy memiliki 7 toples permen. Setiap toples berisi 8 permen.",
+    diketahui:"Toko Sugar Joy punya 7 toples permen. Setiap toples berisi 8 permen.",
+    ditanya:"Berapa jumlah seluruh permen di toko tersebut?",
+    jawaban:56, opsi:[56,63,48,15], ikon:["🍬","🍭","🍪","🍩"],
+    benar:"Hebat! Kamu benar — seluruh permen ada 56. 🎉",
+    salah:"Yuk coba lagi. Pikirkan: ada 7 toples, masing-masing berisi 8 permen. Jumlahnya bertambah atau berkurang?",
+    langkah:[{txt:"7 × 8 = 56", note:"7 toples, tiap toples 8 permen"}]
+  },
+  {
+    n:2, judul:"Pembagian Buku 📚", tipe:"isian",
+    cerita:"Ibu guru memiliki 42 buku cerita yang akan dibagikan sama banyak kepada 6 kelompok siswa.",
+    diketahui:"Ibu guru punya 42 buku cerita. Dibagikan sama banyak kepada 6 kelompok.",
+    ditanya:"Berapa buku yang diterima setiap kelompok?",
+    jawaban:7, satuan:"buku",
+    benar:"Tepat! Tiap kelompok mendapat 7 buku. 👏",
+    salah:"Yuk coba lagi. Pikirkan: 42 buku dibagi sama rata kepada 6 kelompok.",
+    langkah:[{txt:"42 ÷ 6 = 7", note:"42 buku dibagi ke 6 kelompok"}]
+  },
+  {
+    n:3, judul:"Kotak Pensil ✏️", tipe:"drag",
+    cerita:"Sebuah toko alat tulis memiliki 5 kotak pensil. Setiap kotak berisi 9 pensil.",
+    diketahui:"Toko alat tulis punya 5 kotak pensil. Setiap kotak berisi 9 pensil.",
+    ditanya:"Berapa jumlah seluruh pensil tersebut? Susun angka jawabanmu dari kepingan di bawah!",
+    jawaban:45, chips:["4","5","3","9"],
+    benar:"Mantap! Seluruh pensil ada 45. 🌟",
+    salah:"Yuk coba lagi. Pikirkan: 5 kotak, masing-masing berisi 9 pensil.",
+    langkah:[{txt:"5 × 9 = 45", note:"5 kotak, tiap kotak 9 pensil"}]
+  },
+  {
+    n:4, judul:"Paket Kue 🧁", tipe:"benarsalah",
+    cerita:"Ibu membuat 36 kue dan memasukkannya ke dalam 4 kotak dengan jumlah yang sama.",
+    diketahui:"Ibu membuat 36 kue. Dimasukkan ke 4 kotak dengan jumlah sama.",
+    ditanya:"Seorang teman menjawab: 'Setiap kotak berisi 8 kue.' Apakah jawaban itu BENAR atau SALAH?",
+    jawaban:"salah",
+    benar:"Hebat! Kamu benar — jawaban temanmu SALAH, karena seharusnya setiap kotak berisi 9 kue. 🦊",
+    salah:"Yuk coba lagi. Hitung jumlah kue dalam setiap kotak untuk memeriksa jawaban temanmu.",
+    langkah:[{txt:"36 ÷ 4 = 9", note:"36 kue dibagi ke 4 kotak"}]
+  },
+  {
+    n:5, judul:"Permen Acara Sekolah 🎈", tipe:"dua_langkah",
+    cerita:"Panitia membeli 4 kantong permen. Setiap kantong berisi 6 permen. Semua permen tersebut akan dibagikan sama banyak kepada 3 kelompok anak.",
+    diketahui:"Panitia membeli 4 kantong permen, tiap kantong 6 permen. Dibagikan sama banyak kepada 3 kelompok.",
+    ditanya:"Berapa permen yang diterima setiap kelompok? Kerjakan dua langkah berikut!",
+    jawaban:8, langkah1:24,
+    tanya1:"Langkah 1 — Berapa jumlah seluruh permen yang dibeli panitia?",
+    tanya2:"Langkah 2 — Jika dibagikan sama banyak kepada 3 kelompok, berapa permen yang diterima setiap kelompok?",
+    benar:"Luar biasa! Langkah 1 = 24, lalu langkah 2 = 8 permen per kelompok. 🚀",
+    salah:"Yuk coba lagi. Kerjakan langkah 1 dulu: berapa jumlah seluruh permen?",
+    langkah:[{txt:"4 × 6 = 24", note:"Langkah 1: jumlah permen"},{txt:"24 ÷ 3 = 8", note:"Langkah 2: per kelompok"}]
+  },
+  {
+    n:6, judul:"Bunga di Taman 🌸", tipe:"jodohkan",
+    cerita:"Pak Andi menanam 30 tanaman bunga ke dalam 5 baris dengan jumlah tanaman yang sama. Setiap tanaman menghasilkan 3 bunga.",
+    tampilkanInfo:false,
+    ditanya:"Pasangkan tiga kartu berikut ke kolom yang tepat: Diketahui, Ditanya, atau Jawab!",
+    jawaban:18,
+    kartu:[
+      {id:"k", teks:"Pak Andi menanam 30 tanaman ke 5 baris (sama banyak). Setiap tanaman menghasilkan 3 bunga."},
+      {id:"t", teks:"Berapa banyak bunga yang dihasilkan seluruh tanaman dalam satu baris?"},
+      {id:"j", teks:"Bunga dalam satu baris ada 18 bunga."}
+    ],
+    kategori:[{id:"k",nama:"Diketahui"},{id:"t",nama:"Ditanya"},{id:"j",nama:"Jawab"}],
+    benar:"Sip! Kamu menyusun Diketahui, Ditanya, dan Jawab dengan benar. Bunga dalam satu baris = 18. 📐",
+    salah:"Yuk coba lagi. Pikirkan: mana hal yang diketahui, mana yang ditanyakan, mana jawabannya.",
+    langkah:[{txt:"30 ÷ 5 = 6", note:"Langkah 1: tanaman per baris"},{txt:"6 × 3 = 18", note:"Langkah 2: bunga per baris"}]
+  },
+  {
+    n:7, judul:"Paket Alat Tulis 🎒", tipe:"pg",
+    cerita:"Sebuah toko menyiapkan 4 paket alat tulis. Setiap paket berisi 5 pensil. Seluruh pensil tersebut akan dibagikan sama banyak kepada 4 kelas.",
+    diketahui:"Toko menyiapkan 4 paket alat tulis, tiap paket 5 pensil. Dibagikan sama banyak kepada 4 kelas.",
+    ditanya:"Berapa pensil yang diterima setiap kelas?",
+    jawaban:5, opsi:[5,20,4,9],
+    benar:"Tepat! Tiap kelas menerima 5 pensil. 💡",
+    salah:"Yuk coba lagi. Pikirkan: berapa seluruh pensil dulu, lalu dibagi sama rata ke 4 kelas.",
+    langkah:[{txt:"4 × 5 = 20", note:"Langkah 1: jumlah pensil"},{txt:"20 ÷ 4 = 5", note:"Langkah 2: per kelas"}]
+  },
+  {
+    n:8, judul:"Bola Olahraga ⚽", tipe:"pg_gambar",
+    cerita:"Sekolah memiliki 48 bola yang akan dibagikan sama banyak kepada 6 kelas. Setiap kelas kemudian mendapatkan tambahan 2 bola dari guru olahraga.",
+    diketahui:"Sekolah punya 48 bola. Dibagikan sama banyak kepada 6 kelas. Tiap kelas mendapat tambahan 2 bola.",
+    ditanya:"Berapa jumlah bola yang diterima setiap kelas sekarang?",
+    jawaban:10, opsi:[10,8,12,6], ikon:["⚽","🏀","🎾","🏐"],
+    benar:"Tepat! Tiap kelas sekarang memiliki 10 bola. 🎯",
+    salah:"Yuk coba lagi. Pikirkan: berapa bola awal per kelas, lalu ditambah tambahan dari guru.",
+    langkah:[{txt:"48 ÷ 6 = 8", note:"Langkah 1: bola per kelas"},{txt:"8 + 2 = 10", note:"Langkah 2: setelah tambahan"}]
+  },
+  {
+    n:9, judul:"Kue Ulang Tahun 🎂", tipe:"dua_langkah",
+    cerita:"Rina membuat 8 loyang kue. Setiap loyang berisi 3 kue. Semua kue tersebut dimasukkan ke dalam 4 kotak dengan jumlah yang sama.",
+    diketahui:"Rina membuat 8 loyang kue, tiap loyang 3 kue. Semua kue dimasukkan ke 4 kotak dengan jumlah sama.",
+    ditanya:"Berapa banyak kue dalam setiap kotak? Kerjakan dua langkah berikut!",
+    jawaban:6, langkah1:24,
+    tanya1:"Langkah 1 — Berapa jumlah seluruh kue yang dibuat Rina?",
+    tanya2:"Langkah 2 — Jika semua kue dimasukkan ke 4 kotak dengan jumlah sama, berapa kue dalam setiap kotak?",
+    benar:"Luar biasa! Langkah 1 = 24, lalu langkah 2 = 6 kue per kotak. 🎊",
+    salah:"Yuk coba lagi. Kerjakan langkah 1 dulu: berapa jumlah seluruh kue?",
+    langkah:[{txt:"8 × 3 = 24", note:"Langkah 1: jumlah kue"},{txt:"24 ÷ 4 = 6", note:"Langkah 2: per kotak"}]
+  },
+  {
+    n:10, judul:"Stiker Koleksi ⭐", tipe:"isian",
+    cerita:"Dika memiliki 24 stiker yang dibagikan sama banyak kepada 4 temannya. Setiap teman kemudian membeli 3 stiker tambahan.",
+    diketahui:"Dika punya 24 stiker. Dibagikan sama banyak kepada 4 teman. Tiap teman membeli 3 stiker tambahan.",
+    ditanya:"Berapa jumlah stiker yang dimiliki setiap teman sekarang?",
+    jawaban:9, satuan:"stiker",
+    benar:"Hebat! Setiap teman sekarang memiliki 9 stiker. 🌟",
+    salah:"Yuk coba lagi. Pikirkan: berapa stiker awal per teman, lalu ditambah stiker yang dibeli.",
+    langkah:[{txt:"24 ÷ 4 = 6", note:"Langkah 1: stiker per teman"},{txt:"6 + 3 = 9", note:"Langkah 2: setelah beli tambahan"}]
+  }
+];
+
+/* ====================== STATE ====================== */
+let state = { nama:"", kelas:"", idx:0, skor:0, attempts:0, selesai:false, log:[], chipTerpilih:null, pgPairs:null };
+
+/* ====================== UTIL ====================== */
+function $(id){return document.getElementById(id)}
+function formatNum(n){return Number(n).toLocaleString('id-ID')}
+function parseNum(s){s=String(s).replace(/[.\s\u202f]/g,'');const v=parseInt(s,10);return isNaN(v)?NaN:v}
+function tampilJawaban(q){
+  if(q.tipe==='benarsalah') return q.jawaban==='benar' ? 'BENAR' : 'SALAH';
+  return formatNum(q.jawaban) + (q.satuan?(' '+q.satuan):'');
+}
+
+/* ====================== ALUR ====================== */
+function mulai(){
+  const nama=$('inNama').value.trim();
+  const kelas=$('inKelas').value.trim();
+  if(!nama){ $('inNama').focus(); $('inNama').style.borderColor='var(--merah)'; return; }
+  if(!kelas){ $('inKelas').focus(); $('inKelas').style.borderColor='var(--merah)'; return; }
+  state={nama,kelas,idx:0,skor:0,attempts:0,selesai:false,log:[],chipTerpilih:null,pgPairs:null};
+  $('layar-sapa').classList.add('sembunyi');
+  $('layar-hasil').classList.add('sembunyi');
+  $('layar-kuis').classList.remove('sembunyi');
+  render(0);
+}
+
+function render(idx){
+  state.idx=idx; state.attempts=0; state.selesai=false; state.chipTerpilih=null; state.pgPairs=null;
+  const q=QUESTIONS[idx];
+  $('qno').textContent=q.n;
+  $('qjudul').textContent=q.judul;
+  $('cerita').textContent=q.cerita;
+
+  const info=$('infoBox');
+  if(q.tampilkanInfo===false){ info.innerHTML='<span>📋 Tugasmu:</span> <span class="bar">'+q.ditanya+'</span>'; }
+  else {
+    info.innerHTML='<span>🔎 Diketahui:</span> '+q.diketahui+
+      ' <span class="bar">❓ Ditanya:</span> '+q.ditanya;
+  }
+
+  $('feedback').className=''; $('feedback').textContent='';
+  $('feedback').style.display='none';
+  $('reveal').innerHTML='';
+  $('btnPeriksa').classList.remove('sembunyi');
+  $('btnPeriksa').disabled=false;
+  $('btnNext').classList.add('sembunyi');
+  const kartu=document.querySelector('#layar-kuis .kartu');
+  kartu.classList.remove('benar','salah');
+
+  renderInput(q);
+  updateProgress();
+}
+
+function updateProgress(){
+  const total=QUESTIONS.length;
+  const selesaiCount=state.log.length;
+  $('progresTxt').textContent='Soal '+(state.idx+1)+' dari '+total+'  •  Selesai: '+selesaiCount;
+  const pct=( (state.selesai? state.idx+1 : state.idx) / total )*100;
+  $('bar').style.width=pct+'%';
+  $('skorPill').textContent='⭐ Skor: '+state.skor;
+}
+
+/* ====================== RENDER INPUT PER TIPE ====================== */
+function renderInput(q){
+  const area=$('input-area');
+  area.style.pointerEvents=''; area.style.opacity='1';
+  let html='<div class="pertanyaan">'+q.ditanya+'</div>';
+  switch(q.tipe){
+    case 'pg': html+=renderPG(q,false); break;
+    case 'pg_gambar': html+=renderPG(q,true); break;
+    case 'isian': html+=renderIsian(q); break;
+    case 'drag': html+=renderDrag(q); break;
+    case 'benarsalah': html+=renderBenarSalah(q); break;
+    case 'dua_langkah': html+=renderDuaLangkah(q); break;
+    case 'jodohkan': html+=renderJodohkan(q); break;
+  }
+  area.innerHTML=html;
+  if(q.tipe==='drag') aktifkanDrag(q);
+  if(q.tipe==='jodohkan') aktifkanJodohkan(q);
+}
+
+function renderPG(q,gambar){
+  // Acak urutan opsi (beserta ikon) agar posisi jawaban benar terdistribusi merata,
+  // tidak selalu di pilihan A. Diacak sekali per soal dan dipakai ulang saat mengulang.
+  let pairs=state.pgPairs;
+  if(!pairs || pairs.length!==q.opsi.length){
+    pairs=q.opsi.map((v,i)=>({v, ikon: gambar ? (q.ikon?q.ikon[i]:'🔹') : null}));
+    for(let i=pairs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=pairs[i]; pairs[i]=pairs[j]; pairs[j]=t; }
+    state.pgPairs=pairs;
+  }
+  let h='<div class="opts">';
+  pairs.forEach(p=>{
+    h+='<button class="opt" data-val="'+p.v+'" onclick="pilihOpsi(this)">';
+    if(gambar) h+='<span class="ikon">'+(p.ikon||'🔹')+'</span>';
+    h+=formatNum(p.v)+'</button>';
+  });
+  h+='</div>';
+  return h;
+}
+function pilihOpsi(el){
+  const area=$('input-area');
+  area.querySelectorAll('.opt').forEach(o=>o.classList.remove('terpilih'));
+  el.classList.add('terpilih');
+}
+
+function renderIsian(q){
+  return '<div class="input-jawab">'+
+    '<input type="text" id="inJawab" inputmode="numeric" placeholder="Tulis jawabanmu..." autocomplete="off" onkeydown="if(event.key===\'Enter\')periksa()">'+
+    (q.satuan?'<span class="satuan">'+q.satuan+'</span>':'')+
+    '</div>';
+}
+
+function renderDrag(q){
+  const ans=String(q.jawaban);
+  let slots='';
+  for(let i=0;i<ans.length;i++) slots+='<span class="cell" data-i="'+i+'" data-val=""></span>';
+  const chips=q.chips.slice();
+  for(let i=chips.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=chips[i]; chips[i]=chips[j]; chips[j]=t; }
+  let chipHtml=chips.map(c=>'<span class="chip" data-val="'+c+'">'+c+'</span>').join('');
+  return '<div class="susun-area">'+
+    '<div class="slots">'+slots+'</div>'+
+    '<div class="chip-area">'+
+      '<div class="judul-chip">🧩 Klik angka, lalu klik kotak untuk menempatkannya. Klik kotak berisi untuk mengembalikannya.</div>'+
+      chipHtml+
+      '<div class="petunjuk-kecil">Susun angka jawaban dengan urutan yang benar.</div>'+
+    '</div>'+
+  '</div>';
+}
+function aktifkanDrag(q){
+  const area=$('input-area');
+  area.querySelectorAll('.chip').forEach(ch=>{
+    ch.addEventListener('click',()=>{
+      if(ch.classList.contains('pakai')) return;
+      area.querySelectorAll('.chip').forEach(c=>c.classList.remove('terpilih'));
+      ch.classList.add('terpilih');
+      state.chipTerpilih=ch.dataset.val;
+    });
+  });
+  area.querySelectorAll('.cell').forEach(cell=>{
+    cell.addEventListener('click',()=>{
+      if(cell.dataset.val){
+        const v=cell.dataset.val;
+        cell.dataset.val=''; cell.textContent=''; cell.classList.remove('isi');
+        area.querySelectorAll('.chip.pakai').forEach(c=>{ if(c.dataset.val===v){ c.classList.remove('pakai'); } });
+      } else if(state.chipTerpilih){
+        const chipEl=area.querySelector('.chip.terpilih');
+        if(!chipEl) return;
+        cell.dataset.val=state.chipTerpilih; cell.textContent=state.chipTerpilih; cell.classList.add('isi');
+        chipEl.classList.add('pakai'); chipEl.classList.remove('terpilih');
+        state.chipTerpilih=null;
+      }
+    });
+  });
+}
+
+function renderBenarSalah(q){
+  return '<div class="bs-row">'+
+    '<button class="bs b" data-val="benar" onclick="pilihBS(this)">✅ BENAR</button>'+
+    '<button class="bs s" data-val="salah" onclick="pilihBS(this)">❌ SALAH</button>'+
+  '</div>';
+}
+function pilihBS(el){
+  const area=$('input-area');
+  area.querySelectorAll('.bs').forEach(b=>b.classList.remove('terpilih'));
+  el.classList.add('terpilih');
+}
+
+function renderDuaLangkah(q){
+  return '<div class="langkah">'+
+    '<div class="tanya">'+q.tanya1+'</div>'+
+    '<div class="input-jawab"><input type="text" id="inL1" inputmode="numeric" placeholder="Hasil langkah 1" autocomplete="off"></div>'+
+  '</div>'+
+  '<div class="langkah">'+
+    '<div class="tanya">'+q.tanya2+'</div>'+
+    '<div class="input-jawab"><input type="text" id="inL2" inputmode="numeric" placeholder="Hasil akhir" autocomplete="off" onkeydown="if(event.key===\'Enter\')periksa()"></div>'+
+  '</div>';
+}
+
+function renderJodohkan(q){
+  let g='<div class="jodo-grid">';
+  q.kategori.forEach(k=>{
+    g+='<div class="kat" data-id="'+k.id+'"><div class="nama">'+k.nama+'</div></div>';
+  });
+  g+='</div>';
+  g+='<div class="kolam"><div class="judul-k">🎲 Kartu (klik kartu, lalu klik kolom tujuan):</div><div id="pool" style="min-height:40px">';
+  const acak=q.kartu.slice();
+  for(let i=acak.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=acak[i]; acak[i]=acak[j]; acak[j]=t; }
+  acak.forEach(c=>{
+    g+='<div class="kartu-j" data-id="'+c.id+'">'+c.teks+'</div>';
+  });
+  g+='</div></div>';
+  return g;
+}
+function aktifkanJodohkan(q){
+  let terpilih=null;
+  const area=$('input-area');
+  function pilihKartu(el){
+    area.querySelectorAll('.kartu-j').forEach(k=>k.classList.remove('terpilih'));
+    el.classList.add('terpilih'); terpilih=el;
+  }
+  function pindahKeKat(katEl){
+    if(!terpilih) return;
+    const ada=katEl.querySelector('.kartu-j');
+    if(ada){ $('pool').appendChild(ada); }
+    katEl.appendChild(terpilih);
+    terpilih.classList.remove('terpilih'); terpilih=null;
+  }
+  area.querySelectorAll('.kartu-j').forEach(k=>k.addEventListener('click',()=>pilihKartu(k)));
+  area.querySelectorAll('.kat').forEach(k=>k.addEventListener('click',()=>pindahKeKat(k)));
+}
+
+/* ====================== PERIKSA ====================== */
+function cekJawaban(q){
+  const area=$('input-area');
+  if(q.tipe==='pg'||q.tipe==='pg_gambar'){
+    const sel=area.querySelector('.opt.terpilih');
+    return !!sel && parseNum(sel.dataset.val)===q.jawaban;
+  }
+  if(q.tipe==='isian'){
+    const v=parseNum($('inJawab').value);
+    return v===q.jawaban;
+  }
+  if(q.tipe==='drag'){
+    const cells=[...area.querySelectorAll('.cell')];
+    if(cells.some(c=>!c.dataset.val)) return false;
+    return cells.map(c=>c.dataset.val).join('')===String(q.jawaban);
+  }
+  if(q.tipe==='benarsalah'){
+    const sel=area.querySelector('.bs.terpilih');
+    return !!sel && sel.dataset.val===q.jawaban;
+  }
+  if(q.tipe==='dua_langkah'){
+    const v1=parseNum($('inL1').value), v2=parseNum($('inL2').value);
+    return v1===q.langkah1 && v2===q.jawaban;
+  }
+  if(q.tipe==='jodohkan'){
+    const kats=area.querySelectorAll('.kat');
+    for(const c of kats){
+      const card=c.querySelector('.kartu-j');
+      if(!card) return false;
+      if(card.dataset.id!==c.dataset.id) return false;
+    }
+    return true;
+  }
+  return false;
+}
+
+function feedback(tipe,teks){
+  const f=$('feedback');
+  f.style.display='block';
+  f.className=tipe;
+  f.textContent=teks;
+}
+
+function inputTerisi(q){
+  const area=$('input-area');
+  switch(q.tipe){
+    case 'pg': case 'pg_gambar': return !!area.querySelector('.opt.terpilih');
+    case 'isian': return $('inJawab').value.trim()!=='';
+    case 'drag': { const cells=area.querySelectorAll('.cell'); return cells.length>0 && [...cells].every(c=>c.dataset.val); }
+    case 'benarsalah': return !!area.querySelector('.bs.terpilih');
+    case 'dua_langkah': return $('inL1').value.trim()!=='' && $('inL2').value.trim()!=='';
+    case 'jodohkan': { const kats=area.querySelectorAll('.kat'); return kats.length>0 && [...kats].every(c=>c.querySelector('.kartu-j')); }
+  }
+  return true;
+}
+
+function periksa(){
+  const q=QUESTIONS[state.idx];
+  if(!inputTerisi(q)){ feedback('info','⚠️ Yuk isi jawabanmu dulu sebelum diperiksa.'); return; }
+  const kartu=document.querySelector('#layar-kuis .kartu');
+  const benar=cekJawaban(q);
+  if(benar){
+    const poin = state.attempts===0 ? 10 : 8;
+    selesaiSoal(poin,true,q);
+    kartu.classList.add('benar');
+    setTimeout(()=>kartu.classList.remove('benar'),600);
+  } else {
+    state.attempts++;
+    if(state.attempts<2){
+      feedback('salah','❌ Belum tepat. '+q.salah+'  (Kamu masih punya 1 kesempatan mengulang. Nilai berkurang 2 jika benar saat mengulang.)');
+      kartu.classList.add('salah');
+      setTimeout(()=>kartu.classList.remove('salah'),600);
+      renderInput(q);
+    } else {
+      feedback('salah','❌ Maaf, jawaban benarnya: '+tampilJawaban(q)+'.  '+q.salah);
+      kartu.classList.add('salah');
+      setTimeout(()=>kartu.classList.remove('salah'),600);
+      selesaiSoal(0,false,q);
+    }
+  }
+}
+
+function selesaiSoal(poin,solved,q){
+  state.skor+=poin;
+  state.selesai=true;
+  const status = solved ? (state.attempts===0?'benar':'ulang') : 'salah';
+  state.log.push({n:q.n,judul:q.judul,status,poin});
+  const area=$('input-area');
+  area.style.pointerEvents='none'; area.style.opacity='.6';
+  $('btnPeriksa').classList.add('sembunyi');
+  $('btnNext').classList.remove('sembunyi');
+  $('reveal').innerHTML=revealHTML(q);
+  if(solved) feedback('benar','🎉 '+q.benar+'  (Nilai soal ini: '+poin+')');
+  updateProgress();
+}
+
+function revealHTML(q){
+  let h='<div class="reveal-box"><div class="judul">📚 Cara Menyelesaikan</div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:4px">';
+  q.langkah.forEach(s=>{
+    h+='<div class="eq-card"><div class="eq">'+s.txt+'</div><div class="eq-note">'+s.note+'</div></div>';
+  });
+  h+='</div>';
+  h+='<div style="margin-top:8px">Jawaban benar: <b>'+tampilJawaban(q)+'</b></div>';
+  h+='</div>';
+  return h;
+}
+
+function lanjut(){
+  if(state.idx < QUESTIONS.length-1){ render(state.idx+1); }
+  else { showResult(); }
+}
+
+/* ====================== HASIL ====================== */
+function showResult(){
+  $('layar-kuis').classList.add('sembunyi');
+  $('layar-hasil').classList.remove('sembunyi');
+  $('hasilIdentitas').textContent='🎓 '+state.nama+' — Kelas '+state.kelas;
+  $('skorAkhir').textContent=state.skor;
+  const s=state.skor;
+  let pesan;
+  if(s>=90) pesan='🏆 Luar biasa, '+state.nama+'! Kamu juara soal cerita!';
+  else if(s>=70) pesan='🌟 Bagus sekali, '+state.nama+'! Terus berlatih ya!';
+  else if(s>=50) pesan='💪 Lumayan, '+state.nama+'! Yuk berlatih lagi supaya makin jago.';
+  else pesan='🌱 Jangan menyerah, '+state.nama+'! Coba ulangi dan kamu pasti bisa!';
+  $('pesanAkhir').textContent=pesan;
+
+  let t='<table class="rekap"><thead><tr><th>No</th><th>Judul Soal</th><th>Hasil</th><th>Nilai</th></tr></thead><tbody>';
+  state.log.forEach(r=>{
+    const cls=r.status==='benar'?'b':(r.status==='ulang'?'u':'s');
+    const teks=r.status==='benar'?'Benar':(r.status==='ulang'?'Benar (Ulang)':'Salah');
+    t+='<tr><td>'+r.n+'</td><td style="text-align:left">'+r.judul+'</td><td class="'+cls+'">'+teks+'</td><td>'+r.poin+'</td></tr>';
+  });
+  t+='</tbody></table>';
+  $('rekap').innerHTML=t;
+}
+
+function ulangi(){
+  $('layar-hasil').classList.add('sembunyi');
+  $('layar-kuis').classList.add('sembunyi');
+  $('layar-sapa').classList.remove('sembunyi');
+  $('inNama').style.borderColor='var(--abu)';
+  $('inKelas').style.borderColor='var(--abu)';
+}
+</script>
+</body>
+</html>
